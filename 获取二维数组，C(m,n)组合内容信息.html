@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>获取二维数组,C(m,n)组合内容信息</title>
+</head>
+
+<body>
+    <h1>请看控制台</h1>
+
+    <script>
+        //== 递归实现阶乘
+        function factorial(num) {
+            if (num < 0) {
+                return -1;
+            } else if (num === 0 || num === 1) {
+                return 1;
+            } else {
+                return (num * factorial(num - 1));
+            }
+        };
+
+        function getNumberIndexList(num) { //获取某个数字的下标，比如5这个数组，可以是[0,1,2,3,4]这个数组，方便后面运算组合这个数C(5,2);
+            var list = [];
+            for (var i = 0; list.push(i), i < (num - 1); i++) {}
+            return list;
+        }
+
+        function getNumberList(num) { //获取某个数字的下标，比如5这个数组，可以是[1,2,3,4,5]这个数组，方便后面运算组合这个数C(5,2);
+            var list = [];
+            for (var i = 0; list.push(i), i < num; i++) {}
+            return list;
+        }
+
+        var arrList = [
+            [1, 2, 3],
+            [2, 3],
+            [4, 5],
+            [6, 7],
+            [8, 9, 0]
+        ];
+        var newArrList = [];
+        for (let i = 0; i < arrList.length; i++) {
+            newArrList.push(arrList[i].length);
+        }
+        console.log('获取当前选中数组的每个数组长度', newArrList);
+
+
+        //== 传入数组，需要结果内容C(m,n);有结果反馈
+        function groupSplit2(arr, size) {
+            var r = []; //result
+
+            function _(t, a, n) { //tempArr, arr, num
+                if (n === 0) {
+                    r[r.length] = t;
+                    return;
+                }
+                for (var i = 0, l = a.length - n; i <= l; i++) {
+                    var b = t.slice();
+                    b.push(a[i]);
+                    _(b, a.slice(i + 1), n - 1);
+                }
+            }
+            _([], arr, size);
+            return r;
+        }
+        console.log('把二维当一维数组，完成C(m,n)组合', groupSplit2(arrList, 2));
+
+
+        // 二维数组的全组合，把每个数组里面的值拿出来组合
+        function combination(arr) { 
+            var sarr = [
+                []
+            ]; 
+            var result = []; 
+            for (var i = 0; i < arr.length; i++) {  
+                var tarr = [];
+                //console.log('****',sarr)
+                  
+                for (var j = 0; j < sarr.length; j++) {   
+                    for (var k = 0; k < arr[i].length; k++) {
+                        var isEqu = false;    
+                        tarr.push(sarr[j].concat(arr[i][k]));   
+                    }  
+                }  
+                sarr = tarr; 
+            }
+
+             
+            for (var m = 0; m < sarr.length; m++) {  
+                result.push(sarr[m]); 
+            } 
+            return result;
+        }
+
+        //== 传二维数组获取数组的全排列数量，不需求结果
+        function getAllListCombination(list) {
+            var resultNumber = 1;
+            for (var i = 0; i < list.length; i++) {
+                resultNumber *= list[i].length;
+            }
+            return resultNumber;
+        }
+
+
+        //== 获取数组最终结果内容信息保存。
+        function getResultList(arr, num) {
+            var resultList = [];
+            var restultGroupSplit = groupSplit2(arr, num);
+            for (let j = 0; j < restultGroupSplit.length; j++) {
+                resultList.push.apply(resultList, combination(restultGroupSplit[j]));
+            }
+            console.log('最终结果', resultList);
+
+
+            var resultNum = 0;
+            for (let j = 0; j < restultGroupSplit.length; j++) {
+                resultNum += getAllListCombination(restultGroupSplit[j]);
+            }
+
+            console.log('最终数量', resultNum);
+        }
+        getResultList(arrList, 3);
+    </script>
+</body>
+
+</html>
